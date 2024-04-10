@@ -1,4 +1,4 @@
-version: 1.3.3
+version: 0.4.0
 environment:
   matrix:
     - IMAGE: 'Visual Studio 2022'
@@ -9,7 +9,7 @@ environment:
       RUNTIME: 'linux-x64'
 
   my_variable:
-    secure: C0IqVjv+wrTqiWI4cNlCXKndiCX+No8WMcWcsUlUW3ycgeZrjsyAocYEzLI1UTNA
+    secure: W9zp4UoDh0/yZQqKXghZKpcVVXRHPRkCqTzHYrPgbbDv5tRyhAyLsb9TCdJn+Kww
 
 # this is ugly but it works mabye
 
@@ -79,7 +79,7 @@ deploy:
     release: Release
     description: 'Offical Release'
     auth_token:
-      secure: C0IqVjv+wrTqiWI4cNlCXKndiCX+No8WMcWcsUlUW3ycgeZrjsyAocYEzLI1UTNA
+      secure: W9zp4UoDh0/yZQqKXghZKpcVVXRHPRkCqTzHYrPgbbDv5tRyhAyLsb9TCdJn+Kww
     artifact: Archives
     draft: false
     prerelease: false
