@@ -8,9 +8,6 @@ environment:
     - IMAGE: 'Ubuntu'
       RUNTIME: 'linux-x64'
 
-  my_variable:
-    secure: W9zp4UoDh0/yZQqKXghZKpcVVXRHPRkCqTzHYrPgbbDv5tRyhAyLsb9TCdJn+Kww
-
 # this is ugly but it works mabye
 
 build_script:
