@@ -32,7 +32,7 @@ python straycat_server.py
 
  You can now open the `.ust` and use `straycat.py` as a resampler. You need to press cancel in the project properties when UTAU shows the project properties panel.
 ## Running straycat server (UTAU and OpenUtau)
- 1. To run straycat server run the straycat server script `python straycat.py`.
+ 1. To run straycat server run the straycat server script `python straycat_server.py`.
  2. Put `StrayCatRunner.exe` in your Resampelers folder (OpenUtau only) or wherever else you keep your resamplers.
  3. Put `libcurl.dll` in the same folder as `StrayCatRunner.exe` otherwise it will error out and not render anything.
  4. Set `StrayCatRunner.exe` as your Resampeler or Tool2 and call to render.
