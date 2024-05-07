@@ -650,14 +650,14 @@ class Resampler:
         # Distortion flag
         if 'D' in self.flags.keys():
             logging.info('Adding distortion.')
-            distortion_amount = clip(self.flags['MD'], 0, 100)
+            distortion_amount = clip(self.flags['D'], 0, 100)
             ap_render = ap_render * (distortion_amount / 10)
             f0_render = f0_render + np.random.normal(0, distortion_amount, len(f0_render))
 
         # Coarsness flag
         if 'C' in self.flags.keys():
             logging.info('Adding coarseness.')
-            coarseness = clip(self.flags['MC'], 0, 100)
+            coarseness = clip(self.flags['C'], 0, 100)
             for i in range(len(f0_render)):
                 if i % 6 == 0:
                     f0_render[i] = 60
@@ -759,7 +759,7 @@ class Resampler:
         # Growl flag
         if 'R' in self.flags.keys():
             logging.info('Adding tremolo growl flag.')
-            depth = clip(self.flags['MG'] / 100, 0, 1)
+            depth = clip(self.flags['R'] / 100, 0, 1)
 
             rate = 75
 
