@@ -21,15 +21,23 @@ class Program
             System.Console.WriteLine($"Sending: {postFields}");
             var content = new StringContent(postFields, Encoding.UTF8, "application/x-www-form-urlencoded");
 
-            HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:8572", content); // Replace with your URL
+            HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:8572", content); 
 
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Success: Server returned 200 OK");
+                Console.WriteLine("Success: Straycat Resampled Sucessfully");
+            } 
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                Console.Error.WriteLine("Error: StrayCat got an incorrect amount of arguments or the arguments were out of order. Please check the input data before continuing.");
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+            {
+                Console.Error.WriteLine($"Error: An Internal Error occured in StraycatServer. Check your voicebank wav files to ensure they are the correct format. More details:\n{}");
             }
             else
             {
-                Console.Error.WriteLine($"Error: Server returned {response.StatusCode}");
+                Console.Error.WriteLine($"Error: Straycat returned {response.StatusCode}");
             }
         }
         catch (HttpRequestException e)

@@ -12,6 +12,7 @@ import scipy.ndimage as ndimage
 import resampy # Resampler (as in sampling rate stuff)
 from pathlib import Path # path manipulation
 import re
+import traceback
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 version = '0.4.0'
@@ -47,7 +48,7 @@ f0_floor = world.default_f0_floor
 f0_ceil = 1760
 
 # Flags
-flags = ['fe', 'fl', 'fo', 'fv', 'fp', 've', 'vo', 'g', 't', 'A', 'B', 'G', 'P', 'S', 'p', 'R', 'D', 'C']
+flags = ['fe', 'fl', 'fo', 'fv', 'fp', 've', 'vo', 'g', 't', 'A', 'B', 'G', 'P', 'S', 'p', 'R', 'D', 'C', 'Z']
 flag_re = '|'.join(flags)
 flag_re = f'({flag_re})([+-]?\\d+)?'
 flag_re = re.compile(flag_re)
@@ -528,6 +529,10 @@ class Resampler:
         vol = self.volume / 100
         mod = self.modulation / 100
 
+        if "Z" in self.flags.keys():
+            logging.info('FORCED ERROR, MAKE SURE \"Z\" FLAG IS REMOVED')
+            raise KeyError("Forced error by flag \"Z\"")
+
         logging.info('Decoding WORLD features.')
         # Recalculate spectral envelope and aperiodicity
         sp = world.decode_spectral_envelope(features['mgc'], default_fs, fft_size)
@@ -635,6 +640,7 @@ class Resampler:
 
         # map unvoicedness (kinda like voisona huskiness)
         husk = np.mean(ap_render, axis=1)
+
         
         # Breathiness flag
         if 'B' in self.flags.keys():
@@ -782,7 +788,12 @@ class RequestHandler(BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length)
         post_data_string = post_data.decode('utf-8')
         sliced = post_data_string.split(' ')
-        Resampler(*sliced)
+        try:
+            Resampler(*sliced)
+        except Exception as e:
+            trcbk = traceback.format_exc()
+            self.send_response(500, f"An error occurred.\n{trcbk}")
+            self.end_headers()
         self.send_response(200)
         self.end_headers()
 
