@@ -9,7 +9,7 @@ environment:
       RUNTIME: 'linux-x64'
 
 # this is ugly but it works mabye
-
+ 
 build_script:
   - if "%IMAGE%"=="Visual Studio 2022" (
       dotnet restore StrayCatRunner/StrayCatRunner.csproj

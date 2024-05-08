@@ -33,7 +33,7 @@ class Program
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
-                Console.Error.WriteLine($"Error: An Internal Error occured in StraycatServer. Check your voicebank wav files to ensure they are the correct format. More details:\n{response.Message}");
+                Console.Error.WriteLine($"Error: An Internal Error occured in StraycatServer. Check your voicebank wav files to ensure they are the correct format. More details:\n{await response.Content.ReadAsStringAsync()}");
             }
             else
             {
