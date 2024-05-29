@@ -15,7 +15,7 @@ import re
 import traceback
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-version = '0.4.0'
+version = '0.4.2'
 help_string = '''usage: straycat in_file out_file pitch velocity [flags] [offset] [length] [consonant] [cutoff] [volume] [modulation] [tempo] [pitch_string]
 
 Resamples using the WORLD Vocoder.
@@ -777,6 +777,14 @@ class Resampler:
         render *= vol # volume
         save_wav(self.out_file, render)
 
+def split_arguments(input_string):
+    # Regular expression to match two file paths at the beginning
+    otherargs = input_string.split(' ')[-11:]
+    file_path_strings = ' '.join(input_string.split(' ')[:-11])
+    print(file_path_strings)
+    first_file, second_file = file_path_strings.split('.wav ')
+    return [first_file+".wav", second_file] + otherargs
+
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         print(self.requestline)
@@ -787,20 +795,22 @@ class RequestHandler(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         post_data_string = post_data.decode('utf-8')
-        sliced = post_data_string.split(' ')
         try:
+            sliced = split_arguments(post_data_string)
             Resampler(*sliced)
         except Exception as e:
             trcbk = traceback.format_exc()
-            self.send_response(500, f"An error occurred.\n{trcbk}")
+            self.send_response(500)
+            self.send_header('Content-type', 'text/plain')
             self.end_headers()
+            self.wfile.write(f"An error occurred.\n{trcbk}".encode('utf-8'))
         self.send_response(200)
         self.end_headers()
 
 def run(server_class=HTTPServer, handler_class=RequestHandler, port=8572):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
-    print(f'Starting https server on port {port}...')
+    print(f'Starting http server on port {port}...')
     httpd.serve_forever()
 
 if __name__ == '__main__':
